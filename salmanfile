@@ -1,0 +1,25 @@
+pipeline {
+    agent any
+
+    stages {
+
+        stage('Clone') {
+            steps {
+                git branch: 'main',
+                    url: 'https://github.com/tiwariprerna2002-code/pipeline.git'
+            }
+        }
+
+        stage('Deploy') {
+            steps {
+                sshagent(['nginx-server']) {
+                    sh '''
+                        scp -o StrictHostKeyChecking=no index.html \
+                        ubuntu@52.66.243.243:/var/www/html/
+                    '''
+                }
+            }
+        }
+
+    }
+}
